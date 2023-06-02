@@ -32,6 +32,8 @@ import platform
 import sys
 from pathlib import Path
 
+import csv
+
 import torch
 
 FILE = Path(__file__).resolve()
@@ -171,17 +173,7 @@ def run(
                         annotator.box_label(xyxy, label, color=colors(c, True))
                     if save_crop:
                         save_one_box(xyxy, imc, file=save_dir / 'crops' / names[c] / f'{p.stem}.jpg', BGR=True)
-                # Write results to CSV
-                csv_path = str(save_dir / 'results.csv')
-                with open(csv_path, 'w', newline='') as csvfile:
-                    writer = csv.writer(csvfile)
-                    writer.writerow(['x', 'y', 'width', 'height'])  # write header
-                    for *xyxy, conf, cls in reversed(det):
-                        # Rescale boxes from img_size to im0 size
-                        xywh = xyxy2xywh(torch.tensor(xyxy).view(1, 4))[0]  # xywh format
-                        writer.writerow(xywh.tolist())  # write data row
-
-
+                
             # Stream results
             im0 = annotator.result()
             if view_img:
@@ -223,6 +215,18 @@ def run(
     if update:
         strip_optimizer(weights[0])  # update model (to fix SourceChangeWarning)
 
+def save_bounding_box_confidences(confidences, output_file):
+    # Menyimpan data ke dalam file CSV
+    with open(output_file, 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(['Confidence'])
+        for confidence in confidences:
+            writer.writerow([confidence])
+
+# Contoh penggunaan fungsi save_bounding_box_confidences
+bounding_box_confidences = [0.95, 0.87, 0.92, 0.78, 0.85]
+output_file = 'confidences.csv'
+save_bounding_box_confidences(bounding_box_confidences, output_file)
 
 def parse_opt():
     parser = argparse.ArgumentParser()
