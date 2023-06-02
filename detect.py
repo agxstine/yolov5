@@ -180,8 +180,8 @@ def run(
                     # Append results to list
                     results.append([names[int(cls)], conf.item()])
             
-            # Save results to CSV for each image
-            csv_path = str(save_dir / f'results_{img_path.stem}.csv')
+            # Save results to CSV
+            csv_path = str(save_dir / f'results_{path.stem}.csv')
             with open(csv_path, 'w', newline='') as csvfile:
                 writer = csv.writer(csvfile)
                 writer.writerow(['Class', 'Confidence'])
