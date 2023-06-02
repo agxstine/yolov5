@@ -180,12 +180,13 @@ def run(
                     # Append results to list
                     results.append([names[int(cls)], conf.item()])
             
-            # Save results to CSV
-            csv_path = str(save_dir / f'results_{path.stem}.csv')
-            with open(csv_path, 'w', newline='') as csvfile:
-                writer = csv.writer(csvfile)
-                writer.writerow(['Class', 'Confidence'])
-                writer.writerows(results)
+            # Write results to text file
+            txt_path = 'confidence_rates.txt'  # Path to the output text file
+            with open(txt_path, 'w') as f:
+                for result in results:
+                    confidence = result[1]  # Confidence rate is the second element in the result list
+                    line = f'{confidence}\n'
+                    f.write(line)
 
             # Stream results
             im0 = annotator.result()
