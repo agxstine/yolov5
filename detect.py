@@ -80,6 +80,9 @@ def run(
         dnn=False,  # use OpenCV DNN for ONNX inference
         vid_stride=1,  # video frame-rate stride
 ):
+    # Define results variable
+    results = []
+    
     source = str(source)
     save_img = not nosave and not source.endswith('.txt')  # save inference images
     is_file = Path(source).suffix[1:] in (IMG_FORMATS + VID_FORMATS)
@@ -159,9 +162,7 @@ def run(
                     n = (det[:, 5] == c).sum()  # detections per class
                     s += f"{n} {names[int(c)]}{'s' * (n > 1)}, "  # add to string
                 
-                # Define results variable
-                results = []
-                
+                   
                 # Write results
                 for *xyxy, conf, cls in reversed(det):
                     if save_txt:  # Write to file
@@ -183,10 +184,9 @@ def run(
             # Write results to text file
             txt_path = 'confidence_rates.txt'  # Path to the output text file
             with open(txt_path, 'w') as f:
+                writer = csv.writer(f)
                 for result in results:
-                    confidence = result[1]  # Confidence rate is the second element in the result list
-                    line = f'{confidence}\n'
-                    f.write(line)
+                    writer.writerow(result)
 
             # Stream results
             im0 = annotator.result()
