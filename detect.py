@@ -171,6 +171,16 @@ def run(
                         annotator.box_label(xyxy, label, color=colors(c, True))
                     if save_crop:
                         save_one_box(xyxy, imc, file=save_dir / 'crops' / names[c] / f'{p.stem}.jpg', BGR=True)
+                # Write results to CSV
+                csv_path = str(save_dir / 'results.csv')
+                with open(csv_path, 'w', newline='') as csvfile:
+                    writer = csv.writer(csvfile)
+                    writer.writerow(['x', 'y', 'width', 'height'])  # write header
+                    for *xyxy, conf, cls in reversed(det):
+                        # Rescale boxes from img_size to im0 size
+                        xywh = xyxy2xywh(torch.tensor(xyxy).view(1, 4))[0]  # xywh format
+                        writer.writerow(xywh.tolist())  # write data row
+
 
             # Stream results
             im0 = annotator.result()
