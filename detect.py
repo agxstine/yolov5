@@ -180,8 +180,8 @@ def run(
                     # Append results to list
                     results.append([names[int(cls)], conf.item()])
             
-            # Save results to CSV
-            csv_path = str(save_dir / 'results.csv')
+            # Save results to CSV for each image
+            csv_path = str(save_dir / f'results_{img_path.stem}.csv')
             with open(csv_path, 'w', newline='') as csvfile:
                 writer = csv.writer(csvfile)
                 writer.writerow(['Class', 'Confidence'])
@@ -227,19 +227,6 @@ def run(
         LOGGER.info(f"Results saved to {colorstr('bold', save_dir)}{s}")
     if update:
         strip_optimizer(weights[0])  # update model (to fix SourceChangeWarning)
-
-def save_bounding_box_confidences(confidences, output_file):
-    # Menyimpan data ke dalam file CSV
-    with open(output_file, 'w', newline='') as csvfile:
-        writer = csv.writer(csvfile)
-        writer.writerow(['Confidence'])
-        for confidence in confidences:
-            writer.writerow([confidence])
-
-# Contoh penggunaan fungsi save_bounding_box_confidences
-bounding_box_confidences = [0.95, 0.87, 0.92, 0.78, 0.85]
-output_file = 'confidences.csv'
-save_bounding_box_confidences(bounding_box_confidences, output_file)
 
 def parse_opt():
     parser = argparse.ArgumentParser()
