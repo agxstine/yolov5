@@ -173,7 +173,17 @@ def run(
                         annotator.box_label(xyxy, label, color=colors(c, True))
                     if save_crop:
                         save_one_box(xyxy, imc, file=save_dir / 'crops' / names[c] / f'{p.stem}.jpg', BGR=True)
-                
+                        
+                    # Append results to list
+                    results.append([names[int(cls)], conf.item()])
+            
+            # Save results to CSV
+            csv_path = str(save_dir / 'results.csv')
+            with open(csv_path, 'w', newline='') as csvfile:
+                writer = csv.writer(csvfile)
+                writer.writerow(['Class', 'Confidence'])
+                writer.writerows(results)
+
             # Stream results
             im0 = annotator.result()
             if view_img:
