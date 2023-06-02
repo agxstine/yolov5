@@ -181,7 +181,7 @@ def run(
                     results.append([names[int(cls)], conf.item()])
             
             # Save results to CSV
-            csv_path = str(save_dir / f'results_{path.stem}.csv')
+            csv_path = str(save_dir / f'results_{p.stem}.csv')
             with open(csv_path, 'w', newline='') as csvfile:
                 writer = csv.writer(csvfile)
                 writer.writerow(['Class', 'Confidence'])
