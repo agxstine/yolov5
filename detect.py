@@ -178,10 +178,10 @@ def run(
                         save_one_box(xyxy, imc, file=save_dir / 'crops' / names[c] / f'{p.stem}.jpg', BGR=True)
                         
                     # Append results to list
-                    results.append([p.stem, names[int(cls)], conf.item()])
+                    results.append([names[int(cls)], conf.item()])
             
             # Save results to CSV
-            csv_path = str(save_dir / 'results.csv')
+            csv_path = str(save_dir / f'results_{path.stem}.csv')
             with open(csv_path, 'w', newline='') as csvfile:
                 writer = csv.writer(csvfile)
                 writer.writerow(['Class', 'Confidence'])
